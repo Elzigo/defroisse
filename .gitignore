@@ -1,0 +1,14 @@
+# Généré par tools/build.py
+_site/
+out/
+tools/bin/
+app/index.html
+app/check.js
+android/proj/assets/www/
+android/proj/build/
+android/proj/smali/com/visage/protocole/Client.smali
+# Jamais dans le dépôt
+*.jks
+*.keystore
+__pycache__/
+.DS_Store

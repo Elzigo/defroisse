@@ -1,0 +1,91 @@
+
+
+<div class="app">
+<main id="main">
+
+<!-- AUJOURD'HUI -->
+<section class="panel" id="p-aujourdhui" role="tabpanel">
+  <header class="top"><div class="brand" data-cat role="button" tabindex="0" aria-label="Défroisse"><i></i><b class="wm"></b></div>
+    <label class="daychip datepick" title="Choisir un autre jour"><span id="todayDate">Aujourd'hui</span><i data-i="chev"></i><input type="date" id="dayIn" aria-label="Choisir un autre jour"></label></header>
+  <h1 class="vh">Aujourd'hui</h1>
+  <div class="sec-h first"><h2 id="dayTitle">Au programme</h2><span class="more" id="dayHint"></span></div>
+  <div id="rplan"></div>
+  <div id="nudge"></div>
+  <div id="hero"></div>
+  <div id="newsHome" hidden><div class="sec-h"><h2>Nouveautés</h2><button class="more" data-tab="actus">Tout voir<i data-i="chevR"></i></button></div><div class="nrow" id="nrow"></div></div>
+  <div class="sec-h"><h2>Autres routines</h2></div>
+  <div class="rgrid" id="rother"></div>
+  <div id="tip"></div>
+</section>
+
+<!-- GESTES -->
+<section class="panel" id="p-gestes" role="tabpanel" hidden>
+  <header class="top"><div class="brand" data-cat role="button" tabindex="0" aria-label="Défroisse"><i></i><b class="wm"></b></div></header>
+  <h1 class="title">Gestes</h1>
+  <label class="searchbar"><i data-i="search"></i><input id="q" type="search" placeholder="Rides, sillons, cernes, mâchoire…" aria-label="Rechercher un geste ou une zone" autocomplete="off" enterkeyhint="search"><button class="sclear" id="qclear" type="button" aria-label="Effacer la recherche" hidden><i data-i="x"></i></button></label>
+  <div class="filters">
+    <div class="chips" id="chips" role="group" aria-label="Filtres"></div>
+    <div class="pop" id="pop" hidden></div>
+  </div>
+  <div class="actives" id="active"></div>
+  <div class="ggrid" id="tgrid"></div>
+</section>
+
+<!-- PHOTOS -->
+<section class="panel" id="p-photos" role="tabpanel" hidden>
+  <header class="top"><div class="brand" data-cat role="button" tabindex="0" aria-label="Défroisse"><i></i><b class="wm"></b></div></header>
+  <h1 class="title">Photos</h1>
+  <div id="phBody"></div>
+</section>
+
+<!-- APPRENDRE -->
+<section class="panel" id="p-apprendre" role="tabpanel" hidden>
+  <header class="top"><div class="brand" data-cat role="button" tabindex="0" aria-label="Défroisse"><i></i><b class="wm"></b></div><button class="icon-btn" data-tab="reglages" aria-label="Réglages"><i data-i="sliders"></i></button></header>
+  <h1 class="title">Apprendre</h1>
+  <div id="learnBanner"></div>
+  <div class="sec-h"><h2>Au quotidien</h2></div>
+  <div class="list lrows">
+    <button class="li plain" data-tab="alimentation" style="--c:#3E9B68"><span class="ic"><i data-i="apple"></i></span><span class="tx"><b>Alimentation</b><span>Ce qui aide ta peau dans l'assiette</span></span><i data-i="chevR"></i></button>
+    <button class="li plain" data-tab="soins" style="--c:#C95B8E"><span class="ic"><i data-i="flask"></i></span><span class="tx"><b>Soins de la peau</b><span>Quel actif pour quoi</span></span><i data-i="chevR"></i></button>
+    <button class="li plain" data-tab="outils" style="--c:#C9792F"><span class="ic"><i data-i="sparkle"></i></span><span class="tx"><b>Outils</b><span>Gua sha, rouleau, LED</span></span><i data-i="chevR"></i></button>
+  </div>
+  <div id="learnNews"></div>
+  <div class="sec-h"><h2>Comprendre</h2></div>
+  <div class="list lrows">
+    <button class="li plain" data-tab="comprendre" style="--c:#4F7FD0"><span class="ic"><i data-i="face"></i></span><span class="tx"><b>Ton visage</b><span>Ce qui change, et en combien de temps</span></span><i data-i="chevR"></i></button>
+    <button class="li plain" data-tab="symetrie" style="--c:#7A5FC2"><span class="ic"><i data-i="scale"></i></span><span class="tx"><b>Symétrie</b><span>Repérer ton côté tendu</span></span><i data-i="chevR"></i></button>
+    <button class="li plain" data-tab="habitudes" style="--c:#2E8C83"><span class="ic"><i data-i="leaf"></i></span><span class="tx"><b>Habitudes</b><span>Sommeil, repas, écrans</span></span><i data-i="chevR"></i></button>
+  </div>
+  <div class="list lrows lset">
+    <button class="li plain" data-tab="reglages" style="--c:#55555C"><span class="ic"><i data-i="sliders"></i></span><span class="tx"><b>Réglages</b><span>Texte, objectifs, sauvegarde</span></span><i data-i="chevR"></i></button>
+  </div>
+  <p class="note" hidden>Tes données restent sur cet appareil.</p>
+</section>
+
+<!-- SOUS-PAGES CONSTRUITES À PARTIR DES DONNÉES -->
+<section class="panel sub" id="p-alimentation" role="tabpanel" hidden>
+  <header class="subhead"><button class="icon-btn" data-tab="apprendre" aria-label="Retour à Apprendre"><i data-i="chevL"></i></button><span>Apprendre</span></header>
+  <h1 class="title">Alimentation</h1>
+  <div id="alimBody"></div>
+</section>
+<section class="panel sub" id="p-soins" role="tabpanel" hidden>
+  <header class="subhead"><button class="icon-btn" data-tab="apprendre" aria-label="Retour à Apprendre"><i data-i="chevL"></i></button><span>Apprendre</span></header>
+  <h1 class="title">Soins de la peau</h1>
+  <div id="soinsBody"></div>
+</section>
+<section class="panel sub" id="p-outils" role="tabpanel" hidden>
+  <header class="subhead"><button class="icon-btn" data-tab="apprendre" aria-label="Retour à Apprendre"><i data-i="chevL"></i></button><span>Apprendre</span></header>
+  <h1 class="title">Outils</h1>
+  <div id="outilsBody"></div>
+</section>
+<section class="panel sub" id="p-reglages" role="tabpanel" hidden>
+  <header class="subhead"><button class="icon-btn" data-back aria-label="Retour"><i data-i="chevL"></i></button><span>Retour</span></header>
+  <h1 class="title">Réglages</h1>
+  <div id="setBody"></div>
+</section>
+<section class="panel sub" id="p-actus" role="tabpanel" hidden>
+  <header class="subhead"><button class="icon-btn" data-tab="apprendre" aria-label="Retour à Apprendre"><i data-i="chevL"></i></button><span>Apprendre</span></header>
+  <h1 class="title">Nouveautés</h1>
+  <div class="chips" id="nchips"></div>
+  <div class="nlist" id="nlist"></div>
+</section>

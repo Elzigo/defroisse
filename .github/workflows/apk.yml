@@ -1,0 +1,61 @@
+# Construit l'APK Android signé, à la demande (onglet Actions > App Android > Run workflow).
+# À faire une seule fois (ou très rarement) : ensuite, les mises à jour passent par le site.
+# Secrets nécessaires : ANDROID_KEYSTORE_B64 (la clé .jks en base64) et ANDROID_KEYSTORE_PASSWORD.
+name: App Android (APK)
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_code:
+        description: "Numéro de version Android (toujours plus grand que le précédent ; la dernière envoyée était 4)"
+        required: true
+        default: "5"
+      remote:
+        description: "Adresse du site (laisser vide = GitHub Pages de ce dépôt)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Clé de signature
+        env:
+          KS: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+        run: |
+          test -n "$KS" || { echo "Le secret ANDROID_KEYSTORE_B64 manque"; exit 1; }
+          echo "$KS" | base64 -d > "$RUNNER_TEMP/visage-release.jks"
+      - name: Construire l'APK
+        env:
+          KSPASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          REMOTE_IN: ${{ inputs.remote }}
+          VCODE: ${{ inputs.version_code }}
+        run: |
+          OWNER=$(echo "$GITHUB_REPOSITORY_OWNER" | tr 'A-Z' 'a-z')
+          NAME="${GITHUB_REPOSITORY#*/}"
+          if [ "$NAME" = "$OWNER.github.io" ]; then DEF="https://$OWNER.github.io/"; else DEF="https://$OWNER.github.io/$NAME/"; fi
+          REMOTE="${REMOTE_IN:-$DEF}"
+          python3 tools/build.py apk --remote "$REMOTE" --version-code "$VCODE" --keystore "$RUNNER_TEMP/visage-release.jks"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Defroisse-apk
+          path: out/Defroisse.apk
+      - name: Publier l'APK dans les Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VCODE: ${{ inputs.version_code }}
+        run: |
+          gh release create "apk-v$VCODE" out/Defroisse.apk \
+            --title "Défroisse Android v$VCODE" \
+            --notes "APK à installer une seule fois sur le téléphone. Les mises à jour de contenu arrivent ensuite toutes seules depuis le site."

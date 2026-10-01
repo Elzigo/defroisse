@@ -1,0 +1,78 @@
+.class public Lcom/visage/protocole/Client;
+.super Landroid/webkit/WebViewClient;
+
+.method public constructor <init>()V
+    .registers 1
+    invoke-direct {p0}, Landroid/webkit/WebViewClient;-><init>()V
+    return-void
+.end method
+
+# La version en ligne de l'app reste dans l'app ; les autres liens (sources, études) s'ouvrent dans le navigateur
+.method public shouldOverrideUrlLoading(Landroid/webkit/WebView;Ljava/lang/String;)Z
+    .registers 7
+    if-eqz p2, :keep
+    const-string v0, "@@REMOTE@@"
+    invoke-virtual {p2, v0}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
+    move-result v0
+    if-nez v0, :keep
+    const-string v0, "http"
+    invoke-virtual {p2, v0}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
+    move-result v0
+    if-eqz v0, :keep
+    :try_start
+    new-instance v0, Landroid/content/Intent;
+    const-string v1, "android.intent.action.VIEW"
+    invoke-static {p2}, Landroid/net/Uri;->parse(Ljava/lang/String;)Landroid/net/Uri;
+    move-result-object v2
+    invoke-direct {v0, v1, v2}, Landroid/content/Intent;-><init>(Ljava/lang/String;Landroid/net/Uri;)V
+    invoke-virtual {p1}, Landroid/webkit/WebView;->getContext()Landroid/content/Context;
+    move-result-object v1
+    invoke-virtual {v1, v0}, Landroid/content/Context;->startActivity(Landroid/content/Intent;)V
+    :try_end
+    .catch Ljava/lang/Exception; {:try_start .. :try_end} :fail
+    const/4 v0, 0x1
+    return v0
+    :fail
+    const/4 v0, 0x1
+    return v0
+    :keep
+    const/4 v0, 0x0
+    return v0
+.end method
+
+# Si la version en ligne ne charge pas (pas de réseau, site indisponible), on ouvre la copie gardée dans l'app
+.method private fallback(Landroid/webkit/WebView;Landroid/webkit/WebResourceRequest;)V
+    .registers 5
+    invoke-interface {p2}, Landroid/webkit/WebResourceRequest;->isForMainFrame()Z
+    move-result v0
+    if-eqz v0, :done
+    invoke-interface {p2}, Landroid/webkit/WebResourceRequest;->getUrl()Landroid/net/Uri;
+    move-result-object v0
+    invoke-virtual {v0}, Landroid/net/Uri;->toString()Ljava/lang/String;
+    move-result-object v0
+    const-string v1, "@@REMOTE@@"
+    invoke-virtual {v0, v1}, Ljava/lang/String;->startsWith(Ljava/lang/String;)Z
+    move-result v0
+    if-eqz v0, :done
+    const-string v0, "file:///android_asset/www/index.html#offline"
+    invoke-virtual {p1, v0}, Landroid/webkit/WebView;->loadUrl(Ljava/lang/String;)V
+    :done
+    return-void
+.end method
+
+.method public onReceivedError(Landroid/webkit/WebView;Landroid/webkit/WebResourceRequest;Landroid/webkit/WebResourceError;)V
+    .registers 4
+    invoke-direct {p0, p1, p2}, Lcom/visage/protocole/Client;->fallback(Landroid/webkit/WebView;Landroid/webkit/WebResourceRequest;)V
+    return-void
+.end method
+
+.method public onReceivedHttpError(Landroid/webkit/WebView;Landroid/webkit/WebResourceRequest;Landroid/webkit/WebResourceResponse;)V
+    .registers 6
+    invoke-virtual {p3}, Landroid/webkit/WebResourceResponse;->getStatusCode()I
+    move-result v0
+    const/16 v1, 0x190
+    if-lt v0, v1, :done
+    invoke-direct {p0, p1, p2}, Lcom/visage/protocole/Client;->fallback(Landroid/webkit/WebView;Landroid/webkit/WebResourceRequest;)V
+    :done
+    return-void
+.end method
